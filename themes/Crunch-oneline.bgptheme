@@ -24,4 +24,4 @@ override_git_prompt_colors() {
   GIT_PROMPT_SYMBOLS_NO_REMOTE_TRACKING="✭"
 }
 
-reload_git_prompt_colors "Crunch-online"
+reload_git_prompt_colors "Crunch-oneline"
