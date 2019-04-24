@@ -10,11 +10,6 @@ KUBE_PS1_SYMBOL_ENABLE='true'
 KUBE_PS1_CTX_COLOR='yellow'
 
 override_git_prompt_colors() {
-#  if [[ $PROMPT_COMMAND != *_polyglot_kube_ps1_prompt_command* ]]; then
-#    PROMPT_COMMAND="${PROMPT_COMMAND//_kube_ps1_update_cache\;/}"
-#    [[ $PROMPT_COMMAND != *\; ]] && PROMPT_COMMAND+=';'
-#    PROMPT_COMMAND+='_polyglot_kube_ps1_prompt_command'
-#  fi
   Time12a="\$(date +%H:%M)"
  
   GIT_PROMPT_THEME_NAME="Crunch-K8S"
