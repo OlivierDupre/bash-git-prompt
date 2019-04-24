@@ -325,6 +325,11 @@ function update_old_git_prompt() {
 function setGitPrompt() {
   update_old_git_prompt
 
+  if ! type kube_ps1 &> /dev/null; then
+    echo 'gitprompt: Load jonmosco/kube-ps1.' >&2 && return 1
+  fi
+  _kube_ps1_update_cache
+
   local repo=$(git rev-parse --show-toplevel 2> /dev/null)
   if [[ ! -e "${repo}" ]] && [[ "${GIT_PROMPT_ONLY_IN_REPO-}" = 1 ]]; then
     # we do not permit bash-git-prompt outside git repos, so nothing to do
