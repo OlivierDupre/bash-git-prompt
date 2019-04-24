@@ -323,6 +323,7 @@ function update_old_git_prompt() {
 }
 
 function setGitPrompt() {
+  echo "setGitPrompt"
   update_old_git_prompt
 
   if ! type kube_ps1 &> /dev/null; then
