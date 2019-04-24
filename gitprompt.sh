@@ -246,7 +246,6 @@ function git_prompt_config() {
   LAST_COMMAND_INDICATOR="${LAST_COMMAND_INDICATOR//_LAST_COMMAND_STATE_/${GIT_PROMPT_LAST_COMMAND_STATE}}"
 
   # Do this only once to define PROMPT_START and PROMPT_END
-
   if [[ -z "${PROMPT_START:+x}" || -z "${PROMPT_END:+x}" ]]; then
 
     if [[ -z "${GIT_PROMPT_START:+x}" ]] ; then
@@ -276,7 +275,7 @@ function git_prompt_config() {
   else
     PROMPT_LEADING_SPACE=" "
   fi
-
+  
   if [[ "${GIT_PROMPT_ONLY_IN_REPO:-0}" == 1 ]]; then
     EMPTY_PROMPT="${OLD_GITPROMPT}"
   elif [[ "${GIT_PROMPT_WITH_VIRTUAL_ENV:-1}" == 1 ]]; then
@@ -286,6 +285,7 @@ function git_prompt_config() {
     local ps="${PROMPT_START}$(${prompt_callback})${PROMPT_END}"
     EMPTY_PROMPT="${ps//_LAST_COMMAND_INDICATOR_/${LAST_COMMAND_INDICATOR}}"
   fi
+  EMPTY_PROMPT="${EMPTY_PROMPT//_K8S_INDICATOR_/${GIT_PROMPT_K8S_STATE}}"
 
   # fetch remote revisions every other $GIT_PROMPT_FETCH_TIMEOUT (default 5) minutes
   if [[ -z "${GIT_PROMPT_FETCH_TIMEOUT:+x}" ]]; then
@@ -303,6 +303,12 @@ function git_prompt_config() {
 
 function setLastCommandState() {
   GIT_PROMPT_LAST_COMMAND_STATE="${?}"
+}
+
+function setK8SState(){
+  _kube_ps1_update_cache
+  local kube_ps1=$(kube_ps1)
+  [[ -n $kube_ps1 ]] && GIT_PROMPT_K8S_STATE="${kube_ps1}"
 }
 
 function we_are_on_repo() {
@@ -323,7 +329,6 @@ function update_old_git_prompt() {
 }
 
 function setGitPrompt() {
-  echo "setGitPrompt"
   update_old_git_prompt
 
   if ! type kube_ps1 &> /dev/null; then
@@ -485,6 +490,7 @@ function createPrivateIndex {
 
 function updatePrompt() {
   local LAST_COMMAND_INDICATOR
+  local K8S_INDICATOR
   local PROMPT_LEADING_SPACE
   local PROMPT_START
   local PROMPT_END
@@ -700,6 +706,13 @@ function gp_install_prompt {
       # echo "PROMPT_COMMAND does not contain: $setLastCommandStateEntry"
       ;;
   esac
+
+  local setK8SState="setK8SState"
+  if [[ $PROMPT_COMMAND != *setK8SState* ]]; then
+    PROMPT_COMMAND="${PROMPT_COMMAND//_kube_ps1_update_cache\;/}"
+    [[ $PROMPT_COMMAND != *\; ]] && PROMPT_COMMAND+=';'
+    PROMPT_COMMAND+='setK8SState'
+  fi
 
   git_prompt_dir
   source "${__GIT_PROMPT_DIR}/git-prompt-help.sh"

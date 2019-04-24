@@ -25,7 +25,7 @@ override_git_prompt_colors() {
   
   _kube_ps1_update_cache
   local kube_ps1=$(kube_ps1)
-  GIT_PROMPT_START_USER="_LAST_COMMAND_INDICATOR_${White}{${Time12a}} ${Green}[\u@\h]${Yellow}${PathShort}\n${White}${kube_ps1}"
+  GIT_PROMPT_START_USER="_LAST_COMMAND_INDICATOR_${White}{${Time12a}} ${Green}[\u@\h]${Yellow}${PathShort}\n${White}_K8S_INDICATOR_"
   GIT_PROMPT_START_ROOT="${GIT_PROMPT_START_USER}"
   GIT_PROMPT_END_USER="${BoldBlue} ➭ ${ResetColor}"
   GIT_PROMPT_END_ROOT="${BoldRed} # ${ResetColor}"
