@@ -9,6 +9,9 @@ function async_run() {
 function git_prompt_dir() {
   # assume the gitstatus.sh is in the same directory as this script
   # code thanks to http://stackoverflow.com/questions/59895
+  setK8SState
+  K8S_INDICATOR="${K8S_INDICATOR//_K8S_STATE_/${GIT_PROMPT_K8S_STATE}}"
+
   if [[ -z "${__GIT_PROMPT_DIR:+x}" ]]; then
     local SOURCE="${BASH_SOURCE[0]}"
     while [[ -h "${SOURCE}" ]]; do
@@ -240,10 +243,12 @@ function git_prompt_config() {
   else
     LAST_COMMAND_INDICATOR="${GIT_PROMPT_COMMAND_FAIL}";
   fi
+  K8S_INDICATOR=${GIT_PROMPT_K8S_STATE}
 
   # replace _LAST_COMMAND_STATE_ token with the actual state
   GIT_PROMPT_LAST_COMMAND_STATE=$(gp_format_exit_status "${GIT_PROMPT_LAST_COMMAND_STATE}")
   LAST_COMMAND_INDICATOR="${LAST_COMMAND_INDICATOR//_LAST_COMMAND_STATE_/${GIT_PROMPT_LAST_COMMAND_STATE}}"
+  K8S_INDICATOR="${K8S_INDICATOR//_K8S_STATE_/${GIT_PROMPT_K8S_STATE}}"
 
   # Do this only once to define PROMPT_START and PROMPT_END
   if [[ -z "${PROMPT_START:+x}" || -z "${PROMPT_END:+x}" ]]; then
@@ -609,6 +614,7 @@ function updatePrompt() {
   fi
 
   PS1="${NEW_PROMPT//_LAST_COMMAND_INDICATOR_/${LAST_COMMAND_INDICATOR}${ResetColor}}"
+  PS1="${PS1//_K8S_INDICATOR_/${K8S_INDICATOR}${ResetColor}}"
   command rm "${GIT_INDEX_PRIVATE}" 2>/dev/null
 }
 

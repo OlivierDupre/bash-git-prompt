@@ -6,9 +6,6 @@ if ! type kube_ps1 &> /dev/null; then
   echo 'gitprompt: Load jonmosco/kube-ps1.' >&2 && return 1
 fi
 
-KUBE_PS1_SYMBOL_ENABLE='true'
-KUBE_PS1_CTX_COLOR='yellow'
-
 override_git_prompt_colors() {
   Time12a="\$(date +%H:%M)"
  
@@ -33,6 +30,9 @@ override_git_prompt_colors() {
   GIT_PROMPT_PREFIX="${Green}["
   GIT_PROMPT_SUFFIX="${Green}]" 
   GIT_PROMPT_SYMBOLS_NO_REMOTE_TRACKING="✭"
+
+  KUBE_PS1_SYMBOL_ENABLE='true'
+  KUBE_PS1_CTX_COLOR='yellow'
 }
 
 reload_git_prompt_colors "Crunch-K8S"
